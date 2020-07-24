@@ -1,33 +1,26 @@
 package main
 
 import (
-	"fmt"
+	"github.com/gorilla/mux"
+	"log"
 	"net/http"
 )
 
 type Server struct {
-	port   string
-	router *Router
+	port string
 }
 
 func NewServer(port string) *Server {
 	return &Server{
-		port:   port,
-		router: NewRouter(),
+		port: port,
 	}
-}
-
-func (s *Server) HandleRoute(path string, handler http.HandlerFunc) {
-	s.router.routes[path] = handler
 }
 
 func (s *Server) Listen() {
-	http.Handle("/", s.router)
-	err := http.ListenAndServe(s.port, nil)
-	if err != nil {
-		fmt.Println("Error occure to up server ")
-		panic(err)
-	}
+	router := mux.NewRouter()
 
-	fmt.Printf("Server is runing on port %s", s.port)
+	router.HandleFunc("/", HandleRoot)
+	router.HandleFunc("/hello", HandleHello)
+
+	log.Fatal(http.ListenAndServe(s.port, router))
 }
