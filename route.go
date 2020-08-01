@@ -13,7 +13,12 @@ func Router() *mux.Router {
 	router.Use(middleware.MorganGo)
 
 	router.HandleFunc("/", handler.Root)
-	router.HandleFunc("/login", handler.Login)
+	router.HandleFunc("/login", handler.Login).
+		Headers("Content-type", "application/json").
+		Methods("POST")
+	router.HandleFunc("/singup", handler.Signup).
+		Headers("Content-type", "application/json").
+		Methods("POST")
 
 	return router
 }

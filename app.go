@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -17,6 +18,6 @@ func InitApp(addr string) *App {
 
 func (a *App) Run() {
 	route := Router()
-	log.Println("Starting Server")
+	fmt.Println("Starting Server on localhost:8080")
 	log.Println(http.ListenAndServe(a.addr, route))
 }
