@@ -3,7 +3,7 @@ package model
 import jwt "github.com/dgrijalva/jwt-go"
 
 type ErrorResponse struct {
-	code    int
+	Code    int
 	Message string
 }
 
