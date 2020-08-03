@@ -3,7 +3,6 @@ package handler
 import (
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/eddcode/fintechApp/model"
@@ -17,11 +16,6 @@ func ErrorHandler(response http.ResponseWriter, req *http.Request, errMessage mo
 	httpResponse := &model.ErrorResponse{Code: errMessage.Code, Message: errMessage.Message}
 	jsonResponse, err := json.Marshal(httpResponse)
 
-	defer func() {
-		r := recover()
-		log.Println(r)
-	}()
-
 	if err != nil {
 		panic(err)
 	}
@@ -29,5 +23,5 @@ func ErrorHandler(response http.ResponseWriter, req *http.Request, errMessage mo
 	response.Header().Set("Content-Type", "application/json")
 	response.WriteHeader(errMessage.Code)
 	response.Write(jsonResponse)
-	return
+	req.Body.Close()
 }

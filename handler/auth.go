@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -12,36 +11,33 @@ import (
 
 func Login(w http.ResponseWriter, request *http.Request) {
 
-	loginUser := request.Context().Value("login")
-	fmt.Printf("%+v", loginUser)
+	user := request.Context().Value("user").(model.SingIn)
 
-	//token, err := util.SingToken(loginUser.Email)
+	token, err := util.SingToken(user.Email)
 
-	//if err != nil || token == "" {
-	//	panic(err)
-	//}
+	if err != nil || token == "" {
+		panic(err)
+	}
 
-	//loginToken := model.SuccessLogin{
-	//	Email: loginUser.Email,
-	//	Token: token,
-	//}
+	loginToken := model.SuccessLogin{
+		Email: user.Email,
+		Token: token,
+	}
 
-	//responseOk := model.SuccessResponse{
-	//	Code:     http.StatusOK,
-	//	Message:  "Your logged in",
-	//	Response: loginToken,
-	//}
+	responseOk := model.SuccessResponse{
+		Code:     http.StatusOK,
+		Message:  "Your logged in",
+		Response: loginToken,
+	}
 
-	//jsonResponse, jsonErr := json.Marshal(responseOk)
-	//if jsonErr != nil {
-	//	panic(jsonErr)
-	//}
+	jsonResponse, jsonErr := json.Marshal(responseOk)
+	if jsonErr != nil {
+		panic(jsonErr)
+	}
 
-	//w.Header().Set("Content-type", "application/json")
-	//w.WriteHeader(http.StatusOK)
-	//io.WriteString(w, string(jsonResponse))
-	io.WriteString(w, "Hello world")
-
+	w.Header().Set("Content-type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	io.WriteString(w, string(jsonResponse))
 }
 
 func Signup(w http.ResponseWriter, r *http.Request) {

@@ -46,7 +46,7 @@ func ValidateLogin() Middleware {
 				handler.ErrorHandler(w, r, errorResponse)
 			}
 
-			ctx := context.WithValue(r.Context(), "login", loginUser)
+			ctx := context.WithValue(r.Context(), "user", loginUser)
 			next(w, r.WithContext(ctx))
 		}
 	}
